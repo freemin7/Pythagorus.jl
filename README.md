@@ -8,3 +8,7 @@ The program is split in to different files
  * `Concept.jl` defines the Concept type and gives explicit type info
  * `World.jl` defines the type of a global singleton to encapsulate global `*earmuff*` state.
  * `test/provided_example.jl` contains all the "content" from the orignal.
+
+### Open design questions:
+ * Pass predicates as symbol of a function or as it's own type.
+ * 
