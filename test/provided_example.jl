@@ -84,7 +84,7 @@ function equal_sides(P::Polygon)
     return true
 end # function
 
-predicates = (:many_sides,:nonzero_area,:equal_sides)
+predicates = (many_sides,nonzero_area,equal_sides)
 
 reporting = false
 agenda = ();

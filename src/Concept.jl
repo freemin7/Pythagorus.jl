@@ -3,13 +3,13 @@ struct Concept
     defn::String
     predicate::Function
     interest::Float64
-    objects-to-try::Tuple
-    example-found::Tuple
-    unused-predicates::Tuple
-    predicates-used-in-spec::Tuple
-    predicates-used-in-desc::Tuple
-    number-found::Int64
-    number-tried::Int64
+    objects_to_try::Tuple
+    example_found::Tuple
+    unused_predicates::Tuple
+    predicates_used_in_spec::Tuple
+    predicates_used_in_desc::Tuple
+    number_found::Int64
+    number_tried::Int64
     parent::Union{Concept, Missing}
     subconcepts::Tuple{Concept}
 end
