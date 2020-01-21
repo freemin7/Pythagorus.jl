@@ -7,4 +7,4 @@ Pythagorus is a port `PYTHAG.CL` to Julia.
 The program is split in to different files
  * `Concept.jl` defines the Concept type and gives explicit type info
  * `World.jl` defines the type of a global singleton to encapsulate global `*earmuff*` state.
- * `test/provided_example.jl` contains all the "content" from the orignal
+ * `test/provided_example.jl` contains all the "content" from the orignal.
