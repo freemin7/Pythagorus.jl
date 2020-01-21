@@ -22,6 +22,9 @@ struct Polygon{T}
     edges::T
 end
 
+function Base.show(io::IO,  P::Polygon)
+    print(io, P.name)
+end
 universe = [Polygon(:box,(P(0.0,0.0),P(0.0,5.0),P(10.0,5.0),P(10.0,0.0))),
             Polygon(:square,(P(0.0,0.0),P(0.0,10.0),P(10.0,10.0),P(10.0,0.0))),
             Polygon(:isosceles,(P(0.0,0.0),P(5.0,5.0),P(10.0,0.0))),
@@ -87,7 +90,20 @@ end # function
 
 predicates = [many_sides,nonzero_area,equal_sides]
 
-reporting = false
+reporting = true
+
+
+
+
+
+
 agenda = PriorityQueue{Any,Float64}(Base.Order.Reverse);
 
+
+
 Singleton = World(universe,predicates,reporting,agenda)
+
+Object = Concept(Singleton, "Abstract Object", (x)->true, 50, [], [], missing, [])
+Object.parent = Object
+Singleton.agenda[(find_examples_of, Object)] = 50.0;
+Singleton.agenda[(make_specialization, Object)] = 25.0;

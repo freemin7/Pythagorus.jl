@@ -29,6 +29,10 @@ mutable struct Concept
     end
 end
 
+function Base.show(io::IO,  P::Concept)
+    print(io, P.defn)
+end
+
 """
     make_specialization(C::Concept,W::World)
 
@@ -96,11 +100,14 @@ function make_specialization(C::Concept,W::World)
         #no childreen yet
         []
         )
+    if !(haskey(W.agenda,(find_examples_of,C)))
+        enqueue!(W.agenda,(find_examples_of,C), C.interest)
+    end
+    if !(haskey(W.agenda,(make_specialization,C)))
+        enqueue!(W.agenda,(make_specialization,C), spec_task_interest(C))
+    end
 
-    enqueue!(W.agenda,(find_examples_of,C), C.interest)
-    enqueue!(W.agenda,(make_specialization,C), spec_task_interest(C))
-
-    remove!(newc.unused_predicates,pred)
+    newc.unused_predicates=filter((x)->(x!=pred),C.unused_predicates)
 end
 
 
@@ -128,7 +135,7 @@ function find_examples_of(C::Concept,W::World)
         if (C.predicate(x))
             println("$x is an example of $(C.id)")
             C.number_found += 1;
-            push!(C.examples_found,x)
+            push!(C.example_found,x)
         else
             println("$x is not an example of $(C.id)")
         end
@@ -142,7 +149,7 @@ function find_examples_of(C::Concept,W::World)
     # If there are still objects not yet tried, enter a new
     # task on the agenda to try 3 more objects.
 
-    if !(isempty(C.objects_to_try))
+    if !(isempty(C.objects_to_try) & !(haskey(W.agenda,(find_examples_of,C))))
         enqueue!(W.agenda,(find_examples_of,C),examples_task_interest(C))
     else
         if (W.reporting)
@@ -158,11 +165,15 @@ function find_examples_of(C::Concept,W::World)
     # and no tasks for such specialization are already on the
     # agenda, create a new task to make a specialization of C:
 
-    if (C.number_found>0 & isempty(C.subconcepts))
-        #it is not necessary to check if such a task already exists,
-        #since the duplicate key (!!! one-to-one and onto mapping) overwrites
-        #old key
-        enqueue!(W.agenda,(make_specialization,C),spec_task_interest(C))
+    if (C.number_found>0 &
+        isempty(C.subconcepts) )
+
+        if (W.reporting)
+            println((make_specialization,C))
+        end
+        if !(haskey(W.agenda,(make_specialization,C)))
+            enqueue!(W.agenda,(make_specialization,C),spec_task_interest(C))
+        end
     end
 end
 
