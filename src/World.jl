@@ -11,6 +11,7 @@ function explore_concepts(W::World)
     while !(isempty(W.agenda))
         current = dequeue!(W.agenda)
         if (W.reporting)
+            println(W.agenda.xs)
             println("Calling: $(current[1])($(current[2]),W)")
         end
         current[1](current[2],W)

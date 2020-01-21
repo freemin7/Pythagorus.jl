@@ -101,7 +101,7 @@ function make_specialization(C::Concept,W::World)
         []
         )
     if !(haskey(W.agenda,(find_examples_of,C)))
-        enqueue!(W.agenda,(find_examples_of,C), C.interest)
+        enqueue!(W.agenda,(find_examples_of,newc), C.interest)
     end
     if !(haskey(W.agenda,(make_specialization,C)))
         enqueue!(W.agenda,(make_specialization,C), spec_task_interest(C))
@@ -156,10 +156,6 @@ function find_examples_of(C::Concept,W::World)
             print("All objects are tested for $(C.id)")
         end
     end
-    if (W.reporting)
-        display(W.agenda)
-    end
-
     # If there is at least one example of the concept and no
     # specializations for this concept have yet been created,
     # and no tasks for such specialization are already on the
