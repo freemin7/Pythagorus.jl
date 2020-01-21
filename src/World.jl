@@ -1,7 +1,7 @@
-struct World
-    universe::Tuple
-    predicates::Tuple{Function}
+mutable struct World
+    universe::Any #Tuple{Symbol}
+    predicates::Any #Tuple{Symbol}
     reporting::Bool
-    agenda::Tuple
-    concept-counter::Int64
+    agenda::Any
+    concept_counter::Int64
 end
