@@ -85,7 +85,7 @@ function make_specialization(C::Concept,W::World)
     newc = Concept(
         W,
         #Formulate the definition
-        "Is a $(C.id) having $pred",
+        "$(C.defn) with $pred",
         #Create the predicate which tests an object to see if
         #it is an example of the new concept:
         (x)->(C.predicate(x) & pred(x)),
@@ -100,11 +100,14 @@ function make_specialization(C::Concept,W::World)
         #no childreen yet
         []
         )
-    if !(haskey(W.agenda,(find_examples_of,C)))
-        enqueue!(W.agenda,(find_examples_of,newc), C.interest)
+        push!(C.subconcepts,newc)
+
+        println("Created $(newc.id): $(newc.defn)")
+    if !(haskey(W.agenda,(find_examples_of,newc)))
+        enqueue!(W.agenda,(find_examples_of,newc)=>C.interest)
     end
     if !(haskey(W.agenda,(make_specialization,C)))
-        enqueue!(W.agenda,(make_specialization,C), spec_task_interest(C))
+        enqueue!(W.agenda,(make_specialization,C)=>spec_task_interest(C))
     end
 
     newc.unused_predicates=filter((x)->(x!=pred),C.unused_predicates)
@@ -149,8 +152,8 @@ function find_examples_of(C::Concept,W::World)
     # If there are still objects not yet tried, enter a new
     # task on the agenda to try 3 more objects.
 
-    if !(isempty(C.objects_to_try) & !(haskey(W.agenda,(find_examples_of,C))))
-        enqueue!(W.agenda,(find_examples_of,C),examples_task_interest(C))
+    if !(isempty(C.objects_to_try)) & !(haskey(W.agenda,(find_examples_of,C)))
+        enqueue!(W.agenda,(find_examples_of,C)=>examples_task_interest(C))
     else
         if (W.reporting)
             print("All objects are tested for $(C.id)")
@@ -168,7 +171,7 @@ function find_examples_of(C::Concept,W::World)
             println((make_specialization,C))
         end
         if !(haskey(W.agenda,(make_specialization,C)))
-            enqueue!(W.agenda,(make_specialization,C),spec_task_interest(C))
+            enqueue!(W.agenda,(make_specialization,C)=>spec_task_interest(C))
         end
     end
 end
@@ -202,7 +205,7 @@ end
 """
 function examples_task_interest(C::Concept)
     if (ismissing(C.parent))
-        error("Can't compute interest of task to find examples for $C")
+        return 50
     else
         return C.parent.interest*0.8+0.2*C.interest
     end

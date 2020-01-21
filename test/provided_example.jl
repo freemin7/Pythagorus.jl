@@ -1,19 +1,20 @@
+using LinearAlgebra
+using DataStructures
+
 struct P{T<:Real}
     x::T
     y::T
 end
 
-import Base.+, Base.-
-function +(A::P,B::P)
+function Base.:+(A::P,B::P)
  return P(A.x+B.x,A.y+B.y)
 end
-function -(A::P,B::P)
+function Base.:-(A::P,B::P)
  return P(A.x-B.x,A.y-B.y)
 end
 
-using LinearAlgebra
-import LinearAlgebra.norm
-function norm(P::P)
+
+function LinearAlgebra.norm(P::P)
     sqrt(P.x^2+P.y^2)
 end
 
@@ -104,6 +105,6 @@ agenda = PriorityQueue{Any,Float64}(Base.Order.Reverse);
 Singleton = World(universe,predicates,reporting,agenda)
 
 Object = Concept(Singleton, "Abstract Object", (x)->true, 50, [], [], missing, [])
-Object.parent = Object
+
 Singleton.agenda[(find_examples_of, Object)] = 50.0;
 Singleton.agenda[(make_specialization, Object)] = 25.0;
