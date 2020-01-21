@@ -2,3 +2,6 @@ name = "Pythagorus"
 uuid = "0b29a910-de51-4f7b-a8ec-8b6b162cdf78"
 authors = ["joto "]
 version = "0.1.0"
+
+[deps]
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"

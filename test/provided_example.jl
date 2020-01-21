@@ -18,22 +18,23 @@ function norm(P::P)
 end
 
 struct Polygon{T}
+    name::Symbol
     edges::T
 end
 
-box = Polygon((P(0.0,0.0),P(0.0,5.0),P(10.0,5.0),P(10.0,0.0)))
-square = Polygon((P(0.0,0.0),P(0.0,10.0),P(10.0,10.0),P(10.0,0.0)))
-isosceles = Polygon((P(0.0,0.0),P(5.0,5.0),P(10.0,0.0)))
-right_triangle = Polygon((P(0.0,0.0),P(4.0,3.0),P(4.0,0.0)))
-trapezoid = Polygon((P(0.0,0.0),P(5.0,5.0),P(20.0,5.0),P(25.0,0.0)))
-parallelogram = Polygon((P(0.0, 0.0), P(5.0, 5.0), P(15.0, 5.0), P(10.0, 0.0)))
-rhombus = Polygon((P(0.0, 0.0), P(4., 3.), P(9., 3.), P(5., 0.)))
-multi = Polygon((P(0., 0.), P(0., 10.), P(4., 15.), P(10., 15.), P(15., 10.), P(15., 4.), P(10., 0.) ))
-line = Polygon((P(0.0,0.0),P(10.0,0.0)))
-dot = Polygon((P(0.0,0.0),))
+universe = [Polygon(:box,(P(0.0,0.0),P(0.0,5.0),P(10.0,5.0),P(10.0,0.0))),
+            Polygon(:square,(P(0.0,0.0),P(0.0,10.0),P(10.0,10.0),P(10.0,0.0))),
+            Polygon(:isosceles,(P(0.0,0.0),P(5.0,5.0),P(10.0,0.0))),
+            Polygon(:right_triangle,(P(0.0,0.0),P(4.0,3.0),P(4.0,0.0))),
+            Polygon(:trapezoid,(P(0.0,0.0),P(5.0,5.0),P(20.0,5.0),P(25.0,0.0))),
+            Polygon(:parallelogram,(P(0.0, 0.0), P(5.0, 5.0), P(15.0, 5.0), P(10.0, 0.0))),
+            Polygon(:rhombus,(P(0.0, 0.0), P(4., 3.), P(9., 3.), P(5., 0.))),
+            Polygon(:multi,(P(0., 0.), P(0., 10.), P(4., 15.), P(10., 15.), P(15., 10.), P(15., 4.), P(10., 0.) )),
+            Polygon(:line,(P(0.0,0.0),P(10.0,0.0))),
+            Polygon(:dot,(P(0.0,0.0),))]
 
-universe = (:box,:square,:isosceles,:right_triangle,:trapezoid,
-    :parallelogram,:rhombus,:multi,:line,:dot)
+
+
 
 """
     many_sides(P::Polygon)
@@ -84,10 +85,9 @@ function equal_sides(P::Polygon)
     return true
 end # function
 
-predicates = (many_sides,nonzero_area,equal_sides)
+predicates = [many_sides,nonzero_area,equal_sides]
 
 reporting = false
-agenda = ();
-concept_counter = 0;
+agenda = PriorityQueue{Any,Float64}(Base.Order.Reverse);
 
-Singleton = World(universe,predicates,reporting,agenda,concept_counter)
+Singleton = World(universe,predicates,reporting,agenda)

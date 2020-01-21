@@ -1,7 +1,8 @@
+using DataStructures
+
 mutable struct World
-    universe::Any #Tuple{Symbol}
-    predicates::Tuple
+    universe::Array{Any,1}
+    predicates::Array{Function,1}
     reporting::Bool
-    agenda::Any
-    concept_counter::Int64
+    agenda::PriorityQueue{Any,Float64,Base.Order.ReverseOrdering{Base.Order.ForwardOrdering}}
 end
