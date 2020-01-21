@@ -13,7 +13,7 @@ mutable struct Concept
     parent::Union{Concept, Missing}
     subconcepts::Array{Concept}
     function Concept(W::World,Desc,pred,intr,spec::Array,desc::Array,par,subc)
-        new(gensym(),
+        new(gensym(), # Use Julia's build in name generator
             Desc,
             pred,
             intr,

@@ -1,10 +1,10 @@
 using DataStructures
 
 mutable struct World
-    universe::Array{Any,1}
-    predicates::Array{Function,1}
+    universe::Array{Any,1} # Things to classify
+    predicates::Array{Function,1} # Define classes
     reporting::Bool
-    agenda::PriorityQueue{Any,Float64,Base.Order.ReverseOrdering{Base.Order.ForwardOrdering}}
+    agenda::PriorityQueue{Any,Real,Base.Order.ReverseOrdering{Base.Order.ForwardOrdering}}
 end
 
 function explore_concepts(W::World)
@@ -14,6 +14,7 @@ function explore_concepts(W::World)
             println(W.agenda.xs)
             println("Calling: $(current[1])($(current[2]),W)")
         end
+        #Call unqueued task
         current[1](current[2],W)
     end
 end
